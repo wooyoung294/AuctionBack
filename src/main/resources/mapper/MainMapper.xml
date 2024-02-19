@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auction.Mapper.MainMapper">
+
+    <select id="findByUser" parameterType="com.example.auction.Vo.UserVo" resultType="com.example.auction.Vo.UserVo">
+        select id
+             , name
+        from user
+        where id = #{id}
+          AND password = #{password};
+    </select>
+    <update id="updateToken" parameterType="java.util.Map">
+        UPDATE user
+        SET token      = #{token},
+            expireTime = DATE_ADD(NOW(), INTERVAL 10 HOUR)
+        WHERE id = #{id}
+    </update>
+    <insert id="createUser" parameterType="com.example.auction.Vo.UserVo">
+        INSERT INTO user
+        (id,
+         password,
+         name,
+         amount)
+        VALUES (#{id},
+                #{password},
+                #{name},
+                0)
+    </insert>
+
+    <select id="duplicateIdChecked" resultType="int">
+        SELECT COUNT(DISTINCT name)
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <insert id="createSellItem" parameterType="com.example.auction.Vo.AuctionListItemVo">
+        INSERT INTO auctionList (
+                imagePath1,
+                imagePath2,
+                imagePath3,
+                contentName,
+                seller,
+                startTime,
+                startPrice,
+                nowPrice
+                )
+        VALUES (
+                #{imgPath1},
+                #{imgPath2},
+                #{imgPath3},
+                #{contentName},
+                #{seller},
+                #{startTime},
+                #{startPrice},
+                #{nowPrice}
+                )
+    </insert>
+
+    <select id="getListData" resultType="com.example.auction.Vo.AuctionTableVo">
+        SELECT
+            no,
+            imagePath1 as image,
+            contentName,
+            seller,
+            startTime,
+            startPrice,
+            nowPrice
+        FROM
+            auctionList
+        WHERE status != 'finish';
+    </select>
+    <select id="getItem" resultType="com.example.auction.Vo.AuctionListItemVo">
+        SELECT
+            A.no,
+            A.imagePath1 as imgPath1,
+            A.imagePath2 as imgPath2,
+            A.imagePath3 as imgPath3,
+            A.contentName,
+            A.seller,
+            A.startTime,
+            A.startPrice,
+            A.nowPrice,
+            A.status,
+            U.name as buyerId
+        FROM
+            auctionList A
+        LEFT JOIN
+            user U on A.buyerId = U.id
+        WHERE
+            A.no = ${no};
+    </select>
+    <update id="setPriceAndBuyer">
+        UPDATE auctionList
+           SET
+               nowPrice = #{money},
+               buyerId = #{id}
+        WHERE
+           no = #{no}
+    </update>
+    <update id="updateAuctionStatus">
+        UPDATE auctionList
+           SET
+               status = #{status}
+        WHERE
+           no = #{no}
+    </update>
+    <update id="setAuctionResult">
+        UPDATE user
+           SET
+               amount = amount - #{price}
+        WHERE
+           id = #{id}
+    </update>
+    <select id="selectAuctionByNo" resultType="com.example.auction.Vo.AuctionListItemVo">
+        SELECT
+            nowPrice,
+            buyerId
+        FROM
+            auctionList
+        WHERE
+            no = #{no}
+    </select>
+    <select id="userAmount" resultType="java.lang.Integer">
+        SELECT
+            amount
+        FROM
+            user
+        WHERE
+            id = #{id}
+    </select>
+    <select id="getNextNo" resultType="java.lang.String">
+        SELECT
+               MAX(no)+1
+        FROM
+            auctionList;
+
+    </select>
+    <select id="checkedMoney" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            amount
+        FROM
+            user
+        WHERE
+            id=#{id};
+    </select>
+    <select id="openAuction" parameterType="java.lang.String" resultType="com.example.auction.Vo.AuctionOpenNo">
+        select no from auctionList where startTime =#{formattedTime};
+    </select>
+</mapper>
