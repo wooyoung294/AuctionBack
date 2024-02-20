@@ -1,20 +1,15 @@
 package com.example.auction.Service;
 
 import com.example.auction.Mapper.MainMapper;
-import com.example.auction.Vo.AuctionListItemVo;
-import com.example.auction.Vo.AuctionOpenNo;
-import com.example.auction.Vo.AuctionTableVo;
-import com.example.auction.Vo.UserVo;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
+import com.example.auction.Provider.JwtTokenProvider;
+import com.example.auction.Vo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
 import java.util.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,8 +22,10 @@ public class MainService implements MainServiceIF{
     private String projectRoot = System.getProperty("user.dir");
     private String uploadDir = projectRoot + "/uploads/";
     private final MainMapper mainMapper;
-    public MainService(MainMapper mainMapper) {
+    private final JwtTokenProvider jwtTokenProvider;
+    public MainService(MainMapper mainMapper,JwtTokenProvider jwtTokenProvider) {
         this.mainMapper = mainMapper;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -62,7 +59,7 @@ public class MainService implements MainServiceIF{
     }
 
     @Override
-    public int createSellItem(String contentName, String amount, String seller,MultipartFile[] files) {
+    public int createSellItem(String contentName, String amount, String seller,MultipartFile[] files, String startTime) {
         try {
             StringBuilder fileNames = new StringBuilder();  // 파일 이름을 저장할 StringBuilder
 
@@ -97,12 +94,11 @@ public class MainService implements MainServiceIF{
             auctionListItem.setContentName(contentName);
             auctionListItem.setStartPrice(amount);
             auctionListItem.setSeller(seller);
-            auctionListItem.setStartTime("2024-02-18 21:00:00");
+            auctionListItem.setStartTime(startTime);
 
             String[] filePaths = fileNames.toString().split(", ");
             if (filePaths.length >= 1) {
                 auctionListItem.setImgPath1(filePaths[0]);
-//                auctionListItem.setImgPath1("1111");
             }
             if (filePaths.length >= 2) {
                 auctionListItem.setImgPath2(filePaths[1]);
@@ -193,6 +189,33 @@ public class MainService implements MainServiceIF{
     @Override
     public int userAmount(String id) {
         return mainMapper.userAmount(id);
+    }
+
+    @Override
+    public TokenVo tokenUpdate(TokenVo tokenVo) {
+        TokenVo prevTokenVo = mainMapper.findTokenByUser(tokenVo.getId());
+        Timestamp expireDateTime = prevTokenVo.getExpireTime();
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        TokenVo newTokenVo = new TokenVo();
+//        if (expireDateTime.before(currentTimestamp) && tokenVo.getToken().equals(prevTokenVo.getToken())) {
+        if (currentTimestamp.before(expireDateTime) && tokenVo.getToken().equals(prevTokenVo.getToken())) {
+            String token = jwtTokenProvider.createToken(tokenVo.getId());
+            Map<String, Object> params = new HashMap<>();
+            params.put("id", tokenVo.getId());
+            params.put("token", token);
+            int updateResult = mainMapper.updateToken(params);
+            if(updateResult == 1){
+                newTokenVo = mainMapper.findTokenByUser(tokenVo.getId());
+            }
+            else{
+                newTokenVo.setId("SYSTEM");
+                newTokenVo.setToken("EXPIRE");
+            }
+        } else {
+            newTokenVo.setId("SYSTEM");
+            newTokenVo.setToken("EXPIRE");
+        }
+        return newTokenVo;
     }
 
     private static String encodeImage(String imagePath) throws Exception {

@@ -23,6 +23,7 @@ public class CorsConfig {
 
         // 특정 헤더 허용
         config.addAllowedHeader("Content-Type");
+        config.addAllowedHeader("Authorization");
 
         // 자격 증명 허용
         config.setAllowCredentials(true);

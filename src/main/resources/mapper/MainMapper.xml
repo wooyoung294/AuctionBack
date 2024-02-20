@@ -11,6 +11,13 @@
         where id = #{id}
           AND password = #{password};
     </select>
+    <select id="findTokenByUser" parameterType="java.lang.String" resultType="com.example.auction.Vo.TokenVo">
+        select id
+             , token
+             , expireTime
+        from user
+        where id = #{id}
+    </select>
     <update id="updateToken" parameterType="java.util.Map">
         UPDATE user
         SET token      = #{token},

@@ -1,9 +1,6 @@
 package com.example.auction.Mapper;
 
-import com.example.auction.Vo.AuctionListItemVo;
-import com.example.auction.Vo.AuctionOpenNo;
-import com.example.auction.Vo.AuctionTableVo;
-import com.example.auction.Vo.UserVo;
+import com.example.auction.Vo.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,6 +9,8 @@ import java.util.Map;
 @Mapper
 public interface MainMapper {
     UserVo findByUser(UserVo userVo);
+
+    TokenVo findTokenByUser(String id);
 
     int createUser(UserVo userVo);
 
@@ -40,4 +39,5 @@ public interface MainMapper {
     int setAuctionResult(String id, int price);
 
     int userAmount(String id);
+
 }

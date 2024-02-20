@@ -6,10 +6,8 @@ import com.example.auction.Vo.*;
 import io.micrometer.core.lang.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -57,6 +56,12 @@ public class MainController {
         }
         return userVo;
     }
+    @PostMapping("/tokenUpdate")
+    public TokenVo tokenUpdate(@RequestBody TokenVo tokenVo){
+
+        return mainService.tokenUpdate(tokenVo);
+
+    }
     @GetMapping("/duplicateId")
     public int duplicateIdChecked(@RequestParam(value = "id",required = true) String id){
         return mainService.duplicateIdChecked(id);
@@ -73,9 +78,10 @@ public class MainController {
             @RequestParam("contentName") String contentName,
             @RequestParam("amount") String amount,
             @RequestParam("seller") String seller,
-            @RequestParam(value = "files", required = false) MultipartFile[] files
+            @RequestParam(value = "files", required = false) MultipartFile[] files,
+            @RequestParam("startTime") String startTime
     ) {
-        int result = mainService.createSellItem(contentName, amount, seller,files);
+        int result = mainService.createSellItem(contentName, amount, seller,files, startTime);
         return result;
     }
     @GetMapping("/getItem")

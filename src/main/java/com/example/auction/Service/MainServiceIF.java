@@ -1,9 +1,6 @@
 package com.example.auction.Service;
 
-import com.example.auction.Vo.AuctionListItemVo;
-import com.example.auction.Vo.AuctionOpenNo;
-import com.example.auction.Vo.AuctionTableVo;
-import com.example.auction.Vo.UserVo;
+import com.example.auction.Vo.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,7 +14,7 @@ public interface MainServiceIF {
 
     int updateToken(String id, String token);
 
-    int createSellItem(String contentName, String amount, String seller, MultipartFile[] filePath);
+    int createSellItem(String contentName, String amount, String seller, MultipartFile[] filePath, String startTime);
 
     List<AuctionTableVo> getListData();
 
@@ -27,9 +24,10 @@ public interface MainServiceIF {
 
     List<AuctionOpenNo> openAuction(String formattedTime);
 
-//    int updateAuctionStatus(int no, String status);
 
     int setAuctionResult(String no);
 
     int userAmount(String id);
+
+    TokenVo tokenUpdate(TokenVo tokenVo);
 }
