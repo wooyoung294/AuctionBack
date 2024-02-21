@@ -51,7 +51,8 @@
                 seller,
                 startTime,
                 startPrice,
-                nowPrice
+                nowPrice,
+                status
                 )
         VALUES (
                 #{imgPath1},
@@ -61,7 +62,8 @@
                 #{seller},
                 #{startTime},
                 #{startPrice},
-                #{nowPrice}
+                #{nowPrice},
+                ''
                 )
     </insert>
 
