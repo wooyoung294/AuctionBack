@@ -128,7 +128,7 @@ public class MainController {
         simpMessagingTemplate.convertAndSend("/sub/chat/" + message.getChannelId(), message);
     }
 
-    private int sec = 59;
+    private int sec = 599;
     public void setSec(int newSec) {
         this.sec = newSec;
     }
@@ -158,7 +158,7 @@ public class MainController {
     @Async
     @Scheduled(cron = "0 * * * * *") // 매시간 0분 0초에 실행
     public void scheduledMethod() {
-        setSec(59);
+        setSec(599);
         for (int i = 0; i < no.size(); i++) {
             mainService.setAuctionResult(no.get(i).getNo());
         }
