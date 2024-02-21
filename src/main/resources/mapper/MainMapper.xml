@@ -155,4 +155,11 @@
     <select id="openAuction" parameterType="java.lang.String" resultType="com.example.auction.Vo.AuctionOpenNo">
         select no from auctionList where startTime =#{formattedTime};
     </select>
+    <update id="chargeMoney">
+        UPDATE user
+        SET
+            amount = #{money}
+        WHERE
+            id = #{id}
+    </update>
 </mapper>

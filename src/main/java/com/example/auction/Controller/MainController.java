@@ -102,6 +102,10 @@ public class MainController {
     ) {
         return mainService.checkedMoney(id,money,no);
     }
+    @GetMapping("/chargeMoney")
+    public int chargeMoney(@RequestParam("id") String id, @RequestParam("money") int money){
+        return mainService.chargeMoney(id,money);
+    }
     @GetMapping("/userAmount")
     public int userAmount( @RequestParam("id") String id) {
         return mainService.userAmount(id);
@@ -167,7 +171,6 @@ public class MainController {
 
         List<AuctionOpenNo> result = mainService.openAuction(formattedTime);
         if(!result.isEmpty()){
-//            no = result;
             no = new ArrayList<>(result);
         }
     }
