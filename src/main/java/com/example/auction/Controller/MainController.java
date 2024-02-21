@@ -153,13 +153,11 @@ public class MainController {
         if (sec <= 0) {
             String closeMessageContent = "{\"channelId\":\""+noValue+"\", \"writerId\":\"timer\", \"chat\":\"close\"}";
             simpMessagingTemplate.convertAndSend("/sub/chat/" + noValue, closeMessageContent);
-            System.out.println("auction.getNo() = " + auction.getNo());
         }
     }
     @Async
     @Scheduled(cron = "0 * * * * *") // 매시간 0분 0초에 실행
     public void scheduledMethod() {
-        System.out.println("scheduledMethod");
         setSec(59);
         for (int i = 0; i < no.size(); i++) {
             mainService.setAuctionResult(no.get(i).getNo());
