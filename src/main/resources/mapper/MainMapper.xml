@@ -158,7 +158,7 @@
     <update id="chargeMoney">
         UPDATE user
         SET
-            amount = #{money}
+            amount = amount + #{money}
         WHERE
             id = #{id}
     </update>
