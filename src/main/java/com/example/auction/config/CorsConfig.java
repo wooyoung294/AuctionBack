@@ -12,7 +12,8 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // 특정 origins 허용
-        config.addAllowedOrigin("http://localhost:3000");
+//        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://34.64.81.139");
 
         // 특정 HTTP 메서드 허용
         config.addAllowedMethod("OPTIONS");
