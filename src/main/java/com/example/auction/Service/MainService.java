@@ -180,7 +180,7 @@ public class MainService implements MainServiceIF{
     public int setAuctionResult(String no) {
         mainMapper.updateAuctionStatus(Integer.parseInt(no),"finish");
         AuctionListItemVo auctionListItemVo = mainMapper.selectAuctionByNo(Integer.parseInt(no));
-        if(auctionListItemVo==null){
+        if(auctionListItemVo!=null){
             mainMapper.setAuctionResult(auctionListItemVo.getBuyerId(),Integer.parseInt(auctionListItemVo.getNowPrice()));
         }
         return 1;
