@@ -156,7 +156,8 @@ public class MainController {
         }
     }
     @Async
-    @Scheduled(cron = "0 * * * * *") // 매시간 0분 0초에 실행
+//    @Scheduled(cron = "0 * * * * *") // 매시간 0분 0초에 실행
+    @Scheduled(cron = "0 */10 * * * *")
     public void scheduledMethod() {
         setSec(599);
         for (int i = 0; i < no.size(); i++) {
