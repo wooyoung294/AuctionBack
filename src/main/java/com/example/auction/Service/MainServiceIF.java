@@ -32,4 +32,6 @@ public interface MainServiceIF {
     TokenVo tokenUpdate(TokenVo tokenVo);
 
     int chargeMoney(String id, int money);
+
+    int updateTutorial(String id);
 }

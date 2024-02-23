@@ -109,6 +109,9 @@ public class MainController {
     @GetMapping("/userAmount")
     public int userAmount( @RequestParam("id") String id) {
         return mainService.userAmount(id);
+    }@GetMapping("/updateTutorial")
+    public int updateTutorial( @RequestParam("id") String id) {
+        return mainService.updateTutorial(id);
     }
 
     @MessageMapping("/chat")

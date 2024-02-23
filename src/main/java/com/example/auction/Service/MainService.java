@@ -223,6 +223,11 @@ public class MainService implements MainServiceIF{
         return mainMapper.chargeMoney(id,money);
     }
 
+    @Override
+    public int updateTutorial(String id) {
+        return mainMapper.updateTutorial(id);
+    }
+
     private static String encodeImage(String imagePath) throws Exception {
         Path path = Paths.get(imagePath);
         byte[] imageBytes = Files.readAllBytes(path);

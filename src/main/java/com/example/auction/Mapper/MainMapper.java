@@ -41,4 +41,6 @@ public interface MainMapper {
     int userAmount(String id);
 
     int chargeMoney(String id, int money);
+
+    int updateTutorial(String id);
 }

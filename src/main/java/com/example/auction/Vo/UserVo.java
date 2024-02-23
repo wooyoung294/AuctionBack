@@ -9,5 +9,6 @@ public class UserVo {
     private String name;
     private String amount;
     private String token;
+    private String tutorial;
 
 }

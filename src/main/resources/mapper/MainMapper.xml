@@ -7,6 +7,7 @@
     <select id="findByUser" parameterType="com.example.auction.Vo.UserVo" resultType="com.example.auction.Vo.UserVo">
         select id
              , name
+             , tutorial
         from user
         where id = #{id}
           AND password = #{password};
@@ -119,6 +120,13 @@
         UPDATE user
            SET
                amount = amount - #{price}
+        WHERE
+           id = #{id}
+    </update>
+    <update id="updateTutorial">
+        UPDATE user
+           SET
+               tutorial = 1
         WHERE
            id = #{id}
     </update>
