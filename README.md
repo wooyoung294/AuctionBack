@@ -5,7 +5,7 @@
 ![auction](https://github.com/wooyoung294/AuctionFront/assets/160103260/55ef9249-f3d7-4ca4-8334-7b84be20f347)
 
 
-+ 배포 주소 : wooyu.world
++ 배포 주소 : http://wooyu.world
 + 개발 기간 : 2024-02-17 ~ 2024-02-23
 + 개발 이유 : WebSocket을 사용해 보고 싶었는데 채팅보다는 경매가 더 재밌지 않을까 해서...
 
